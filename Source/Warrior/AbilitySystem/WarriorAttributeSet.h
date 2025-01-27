@@ -47,4 +47,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Defense")
 	FGameplayAttributeData DefensePower;
 	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DefensePower)
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Defense")
+	FGameplayAttributeData DamageTaken;
+	ATTRIBUTE_ACCESSORS(UWarriorAttributeSet, DamageTaken)
+
+	
 };
