@@ -66,7 +66,7 @@ FActiveGameplayEffectHandle UWarriorGameplayAbility::NativeApplyEffectSpecHandle
 		*InSpecHandle.Data,
 		TargetASC
 	);
-
+	
 	return FActiveGameplayEffectHandle();
 }
 
