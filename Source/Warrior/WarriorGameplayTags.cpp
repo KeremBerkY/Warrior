@@ -26,6 +26,10 @@ namespace WarriorGameplayTags
 
 	UE_DEFINE_GAMEPLAY_TAG(Player_Status_JumpToFinisher, "Player.Status.JumpToFinisher");
 	
+	UE_DEFINE_GAMEPLAY_TAG(Player_SetByCaller_AttackType_Light, "Player.SetByCaller.AttackType.Light");
+	UE_DEFINE_GAMEPLAY_TAG(Player_SetByCaller_AttackType_Heavy, "Player.SetByCaller.AttackType.Heavy");
+
+		/** Player Tags for C++ functionalities **/
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_OnComplete, "Player.Event.OnComplete");
 	
 	/** Enemy Tags **/
@@ -33,6 +37,8 @@ namespace WarriorGameplayTags
 
 	/** Shared Tags **/
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_MeleeHit, "Shared.Event.MeleeHit");
+	
+	UE_DEFINE_GAMEPLAY_TAG(Shared_SetByCaller_BaseDamage, "Shared.SetByCaller.BaseDamage");
 
 
 
