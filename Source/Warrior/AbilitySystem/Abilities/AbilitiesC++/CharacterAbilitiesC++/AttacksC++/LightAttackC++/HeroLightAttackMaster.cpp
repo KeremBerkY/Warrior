@@ -3,10 +3,13 @@
 
 #include "HeroLightAttackMaster.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Warrior/WarriorFunctionLibrary.h"
+#include "Warrior/WarriorGameplayTags.h"
 #include "Warrior/AbilitySystem/Abilities/AbilitiesC++/WarriorAbilityTask_PlayMontageAndWaitForEvent.h"
 #include "Warrior/Characters/WarriorHeroCharacter.h"
+#include "Warrior/Components/Combat/HeroCombatComponent.h"
 
 UHeroLightAttackMaster::UHeroLightAttackMaster()
 {
@@ -15,7 +18,7 @@ UHeroLightAttackMaster::UHeroLightAttackMaster()
 	ActivationOwnedTags.AddTag(AbilityTag);
 
 	CurrentLightAttackComboCount = 1;
-	bIsComboTimerActive = false;
+	UsedComboCount = 0;
 
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
@@ -27,6 +30,8 @@ void UHeroLightAttackMaster::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 	if (CharacterRef)
 	{
 		ClearComboResetTimer();
+
+		UsedComboCount = CurrentLightAttackComboCount;
 		
 		HandleComboAndSetMontage();
 		StartAnimMontage();
@@ -92,11 +97,31 @@ void UHeroLightAttackMaster::OnEventReceived(FGameplayTag EventTag, FGameplayEve
 {
 	Super::OnEventReceived(EventTag, Payload);
 
+	if (EventTag == WarriorGameplayTags::Shared_Event_MeleeHit)
+	{
+		HandleApplyDamage(Payload);
+	}
+	
 	if (EventTag == FGameplayTag::RequestGameplayTag(FName("Player.Event.OnComplete")))
 	{
 		OnCompleted(EventTag, Payload);
 	}
 	
+}
+
+void UHeroLightAttackMaster::HandleApplyDamage(const FGameplayEventData& GameplayEventData)
+{
+	if (AActor* LocalTargetActor = Cast<AActor>(GameplayEventData.Target))
+	{
+		if (const UHeroCombatComponent* HeroCombatComponent = GetHeroCharacterFromWarriorGameplayAbility()->GetHeroCombatComponent())
+		{
+			const float WeaponBaseDamage = HeroCombatComponent->GetHeroCurrentEquipWeaponDamageAtLevel(GetAbilityLevel());
+			const auto SpecHandle = MakeWarriorDamageEffectSpecHandle(DamageEffect, WeaponBaseDamage, WarriorGameplayTags::Player_SetByCaller_AttackType_Light, UsedComboCount);
+			NativeApplyEffectSpecHandleToTarget(LocalTargetActor, SpecHandle);
+
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(LocalTargetActor, WarriorGameplayTags::Shared_Event_HitReact, GameplayEventData);
+		}
+	}
 }
 
 void UHeroLightAttackMaster::OnCompleted(FGameplayTag EventTag, FGameplayEventData Payload)
@@ -119,5 +144,6 @@ void UHeroLightAttackMaster::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	SetComboResetTimer();
 }
+
 
 

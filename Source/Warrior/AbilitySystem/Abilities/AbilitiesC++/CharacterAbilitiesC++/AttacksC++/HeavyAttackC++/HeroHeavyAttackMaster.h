@@ -34,7 +34,6 @@ private:
 	FTimerHandle ComboCountResetTimerHandle;
 
 	int32 CurrentHeavyAttackComboCount;
-
-	bool bIsComboTimerActive;
+	int32 UsedComboCount;
 
 };

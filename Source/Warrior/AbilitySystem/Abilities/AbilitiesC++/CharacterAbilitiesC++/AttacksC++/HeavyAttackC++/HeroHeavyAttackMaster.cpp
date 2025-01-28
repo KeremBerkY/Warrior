@@ -4,6 +4,8 @@
 #include "HeroHeavyAttackMaster.h"
 
 #include "Warrior/WarriorFunctionLibrary.h"
+#include "Warrior/WarriorGameplayTags.h"
+#include "Warrior/Components/Combat/HeroCombatComponent.h"
 
 UHeroHeavyAttackMaster::UHeroHeavyAttackMaster()
 {
@@ -12,7 +14,7 @@ UHeroHeavyAttackMaster::UHeroHeavyAttackMaster()
 	ActivationOwnedTags.AddTag(AbilityTag);
 
 	CurrentHeavyAttackComboCount = 1;
-	bIsComboTimerActive = false;
+	UsedComboCount = 0;
 
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
@@ -30,6 +32,8 @@ void UHeroHeavyAttackMaster::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 			CurrentHeavyAttackComboCount = AttackMontagesMap.Num();
 		}
 
+		UsedComboCount = CurrentHeavyAttackComboCount;
+		
 		HandleComboAndSetMontage();
 		StartAnimMontage();
 	}
@@ -42,7 +46,6 @@ void UHeroHeavyAttackMaster::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 
 void UHeroHeavyAttackMaster::HandleComboAndSetMontage()
 {
-	
 	if (AttackMontagesMap.Contains(CurrentHeavyAttackComboCount))
 	{
 		if (UAnimMontage* SelectedMontage = AttackMontagesMap[CurrentHeavyAttackComboCount])
@@ -50,7 +53,6 @@ void UHeroHeavyAttackMaster::HandleComboAndSetMontage()
 			AbilityMontage = SelectedMontage;
 		}
 	}
-	
 	
 	if (CurrentHeavyAttackComboCount == AttackMontagesMap.Num())
 	{
@@ -97,6 +99,19 @@ void UHeroHeavyAttackMaster::OnEventReceived(FGameplayTag EventTag, FGameplayEve
 {
 	Super::OnEventReceived(EventTag, Payload);
 
+	if (EventTag == WarriorGameplayTags::Shared_Event_MeleeHit)
+	{
+		if (AActor* LocalTargetActor = Cast<AActor>(Payload.Target))
+		{
+			if (const UHeroCombatComponent* HeroCombatComponent = GetHeroCharacterFromWarriorGameplayAbility()->GetHeroCombatComponent())
+			{
+				const float WeaponBaseDamage = HeroCombatComponent->GetHeroCurrentEquipWeaponDamageAtLevel(GetAbilityLevel());
+				const auto SpecHandle = MakeWarriorDamageEffectSpecHandle(DamageEffect, WeaponBaseDamage, WarriorGameplayTags::Player_SetByCaller_AttackType_Heavy, UsedComboCount);
+				NativeApplyEffectSpecHandleToTarget(LocalTargetActor, SpecHandle);
+			}
+		}
+	}
+	
 	if (EventTag == FGameplayTag::RequestGameplayTag(FName("Player.Event.OnComplete")))
 	{
 		OnCompleted(EventTag, Payload);

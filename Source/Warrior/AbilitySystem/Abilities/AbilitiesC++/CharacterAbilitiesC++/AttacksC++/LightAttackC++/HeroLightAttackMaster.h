@@ -31,12 +31,12 @@ private:
 	void ResetAttackComboCount();
 	void SetComboResetTimer();
 	void ClearComboResetTimer();
+	void HandleApplyDamage(const FGameplayEventData& GameplayEventData);
 	
 	FTimerHandle ComboCountResetTimerHandle;
 
 	int32 CurrentLightAttackComboCount;
-
-	bool bIsComboTimerActive;
+	int32 UsedComboCount;
 
 	
 };
