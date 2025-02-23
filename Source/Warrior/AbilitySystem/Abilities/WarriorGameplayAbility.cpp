@@ -68,7 +68,7 @@ FActiveGameplayEffectHandle UWarriorGameplayAbility::NativeApplyEffectSpecHandle
 		TargetASC
 	);
 	
-	return FActiveGameplayEffectHandle();
+	return FActiveGameplayEffectHandle(); // Delete this
 }
 
 FActiveGameplayEffectHandle UWarriorGameplayAbility::BP_ApplyEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle, EWarriorSuccessType& OutSuccessType)

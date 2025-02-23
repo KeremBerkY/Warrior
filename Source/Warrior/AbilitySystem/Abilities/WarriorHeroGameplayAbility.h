@@ -22,7 +22,7 @@ public:
 	AWarriorHeroCharacter* GetHeroCharacterFromActorInfo();
 
 	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
-	AWarriorHeroController* GetHeroControllerFromActorInfo();
+	AWarriorHeroController* GetHeroControllerFromActorInfo();	
 	
 	UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
 	UHeroCombatComponent* GetHeroCombatComponentFromActorInfo();

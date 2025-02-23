@@ -7,6 +7,7 @@
 #include "WarriorAbilityTask_PlayMontageAndWaitForEvent.generated.h"
 
 class UWarriorAbilitySystemComponent;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FWarriorPlayMontageAndWaitForEventDelegate, FGameplayTag, EventTag,
                                              FGameplayEventData, EventData);
 
