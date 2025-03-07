@@ -46,6 +46,7 @@ public:
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 
 protected:
+	UPROPERTY()
 	TArray<AActor*> OverlappedActors;
 	
 private:

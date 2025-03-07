@@ -3,34 +3,47 @@
 
 #include "EnemyCombatComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "Warrior/WarriorDebugHelper.h"
+#include "Warrior/WarriorGameplayTags.h"
 
-// Sets default values for this component's properties
-UEnemyCombatComponent::UEnemyCombatComponent()
+
+void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	Super::OnHitTargetActor(HitActor);
 
-	// ...
-}
+	if (OverlappedActors.Contains(HitActor))
+	{
+		return;
+	}
 
+	OverlappedActors.AddUnique(HitActor);
 
-// Called when the game starts
-void UEnemyCombatComponent::BeginPlay()
-{
-	Super::BeginPlay();
+	// TODO: Implement block check
+	bool bIsValidBlock = false;
 
-	// ...
+	const bool bIsPlayerBlocking = false;
+	const bool bIsMyAttackUnblockable = false;
+
+	if (bIsPlayerBlocking && bIsMyAttackUnblockable)
+	{
+		// TODO: Check if the block is valid
+	}
+
+	FGameplayEventData EventData;
+	EventData.Instigator = GetOwningPawn();
+	EventData.Target = HitActor;
 	
+	if (bIsValidBlock)
+	{
+		// TODO: Handle successful block
+	}
+	else
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			GetOwningPawn(),
+			WarriorGameplayTags::Shared_Event_MeleeHit,
+			EventData
+		);
+	}
 }
-
-
-// Called every frame
-void UEnemyCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                          FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
