@@ -63,7 +63,7 @@ EBTNodeResult::Type UBTTask_RotateToFaceTarget::ExecuteTask(UBehaviorTreeCompone
 		return EBTNodeResult::Failed; 
 	}
 
-	if (HasReachedAnglePercision(OwningPawn, TargetActor))
+	if (HasReachedAnglePrecision(OwningPawn, TargetActor))
 	{
 		Memory->Reset();
 		return EBTNodeResult::Succeeded;
@@ -81,7 +81,7 @@ void UBTTask_RotateToFaceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uin
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 
-	if (HasReachedAnglePercision(Memory->OwningPawn.Get(), Memory->TargetActor.Get()))
+	if (HasReachedAnglePrecision(Memory->OwningPawn.Get(), Memory->TargetActor.Get()))
 	{
 		Memory->Reset();
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
@@ -96,7 +96,7 @@ void UBTTask_RotateToFaceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uin
 
 }
 
-bool UBTTask_RotateToFaceTarget::HasReachedAnglePercision(APawn* QueryPawn, AActor* TargetActor) const
+bool UBTTask_RotateToFaceTarget::HasReachedAnglePrecision(APawn* QueryPawn, AActor* TargetActor) const
 {
 	const FVector OwnerForward = QueryPawn->GetActorForwardVector();
 	const FVector OwnerToTargetNormalized = (TargetActor->GetActorLocation() - QueryPawn->GetActorLocation()).GetSafeNormal();
