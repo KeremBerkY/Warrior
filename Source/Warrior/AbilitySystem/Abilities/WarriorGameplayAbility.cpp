@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "WarriorHeroGameplayAbility.h"
+#include "Warrior/WarriorFunctionLibrary.h"
 #include "Warrior/WarriorGameplayTags.h"
 #include "Warrior/AbilitySystem/WarriorAbilitySystemComponent.h"
 #include "Warrior/Characters/WarriorHeroCharacter.h"
@@ -110,6 +111,40 @@ FGameplayEffectSpecHandle UWarriorGameplayAbility::MakeWarriorDamageEffectSpecHa
 	}
 
 	return EffectSpecHandle;
+}
+
+void UWarriorGameplayAbility::ApplyGameplayEffectSpecHandleHitResults(const FGameplayEffectSpecHandle& InSpecHandle, const TArray<FHitResult>& InHitResults)
+{
+	if (InHitResults.IsEmpty())
+	{
+		return;
+	}
+
+	APawn* OwningPawn = CastChecked<APawn>(GetAvatarActorFromActorInfo());
+	
+	for (const FHitResult& Hit : InHitResults)
+	{
+		if (APawn* HitPawn = Cast<APawn>(Hit.GetActor()))
+		{
+			if (UWarriorFunctionLibrary::IsTargetPawnHostile(OwningPawn ,HitPawn))
+			{
+				FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyEffectSpecHandleToTarget(HitPawn, InSpecHandle);
+
+				if (ActiveGameplayEffectHandle.WasSuccessfullyApplied())
+				{
+					FGameplayEventData Data;
+					Data.Instigator = OwningPawn;
+					Data.Target = HitPawn;
+					
+					UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+						HitPawn,
+						WarriorGameplayTags::Shared_Event_HitReact,
+						Data
+					);
+				}
+			}
+		}
+	}
 }
 
 

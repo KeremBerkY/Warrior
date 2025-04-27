@@ -22,6 +22,18 @@ struct FWarriorHeroAbilitySet
 	TSubclassOf<UWarriorGameplayAbility> AbilityToGrant;
 
 	bool IsValid() const;
+};
+
+USTRUCT(BlueprintType)
+struct FWarriorHeroSpecialAbilitySet : public FWarriorHeroAbilitySet
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UMaterialInterface> SoftAbilityIconMaterial;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "Player.Cooldown"))
+	FGameplayTag AbilityCooldownTag;
 	
 };
 
@@ -39,6 +51,9 @@ struct FWarriorHeroWeaponData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
 	TArray<FWarriorHeroAbilitySet> DefaultWeaponAbilities;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
+	TArray<FWarriorHeroSpecialAbilitySet> SpecialWeaponAbilities;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FScalableFloat WeaponBaseDamage;
 	

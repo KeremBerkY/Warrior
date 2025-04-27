@@ -3,34 +3,27 @@
 
 #include "EnemyUIComponent.h"
 
+#include "Warrior/Widgets/WarriorWidgetBase.h"
 
-// Sets default values for this component's properties
-UEnemyUIComponent::UEnemyUIComponent()
+void UEnemyUIComponent::RegisterEnemyDrawnWidget(UWarriorWidgetBase* InWidgetToRegister)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	EnemyDrawnWidgets.Add(InWidgetToRegister);
 }
 
-
-// Called when the game starts
-void UEnemyUIComponent::BeginPlay()
+void UEnemyUIComponent::RemoveEnemyDrawnWidgetsIfAny()
 {
-	Super::BeginPlay();
+	if (EnemyDrawnWidgets.IsEmpty())
+	{
+		return;
+	}
 
-	// ...
-	
+	for (UWarriorWidgetBase* DrawnWidget : EnemyDrawnWidgets)
+	{
+		if (DrawnWidget)
+		{
+			DrawnWidget->RemoveFromParent();
+		}
+	}
+
+	EnemyDrawnWidgets.Empty();
 }
-
-
-// Called every frame
-void UEnemyUIComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                      FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-

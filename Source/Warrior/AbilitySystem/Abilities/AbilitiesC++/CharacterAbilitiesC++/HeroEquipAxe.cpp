@@ -85,7 +85,7 @@ void UHeroEquipAxe::HandleEquipWeapon(AWarriorHeroWeapon* InWeaponToEquip) const
 
 	TArray<FGameplayAbilitySpecHandle> GrantedAbilityHandles;
 
-	GetWarriorAbilitySystemComponentFromActorInfo()->GrantHeroWeaponAbilities(HeroWeaponData.DefaultWeaponAbilities, GetAbilityLevel(), GrantedAbilityHandles);
+	GetWarriorAbilitySystemComponentFromActorInfo()->GrantHeroWeaponAbilities(HeroWeaponData.DefaultWeaponAbilities, HeroWeaponData.SpecialWeaponAbilities, GetAbilityLevel(), GrantedAbilityHandles);
 
 	InWeaponToEquip->AssignGrantedAbilitySpecHandles(GrantedAbilityHandles);
 }
