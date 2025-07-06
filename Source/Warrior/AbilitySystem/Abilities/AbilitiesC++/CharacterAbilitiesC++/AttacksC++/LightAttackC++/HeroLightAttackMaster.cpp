@@ -106,7 +106,6 @@ void UHeroLightAttackMaster::OnEventReceived(FGameplayTag EventTag, FGameplayEve
 	{
 		OnCompleted(EventTag, Payload);
 	}
-	
 }
 
 void UHeroLightAttackMaster::HandleApplyDamage(const FGameplayEventData& GameplayEventData)

@@ -137,10 +137,6 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Debug::Print(TEXT("Working"));
-	
-	
 }
 
 void AWarriorHeroCharacter::Tick(float DeltaTime)

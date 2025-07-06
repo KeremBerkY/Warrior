@@ -50,7 +50,7 @@ AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCurrentEquippedWeapon() co
 		return nullptr;
 	}
 
-	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
+	return 	GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag); // CurrentEquippedWeaponTag dı fakat geri dönüş weapon? nasıl böyle bıraktım anlamadım:)??? 
 }
 
 void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
